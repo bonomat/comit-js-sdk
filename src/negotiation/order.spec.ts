@@ -286,8 +286,14 @@ describe("Payload module", () => {
     };
 
     const takerCriteria = {
-      buy: "BTC",
-      sell: "ETH"
+      buy: {
+        asset: "bitcoin",
+        ledger: "bitcoin"
+      },
+      sell: {
+        asset: "ether",
+        ledger: "ethereum"
+      }
     };
     const order = new Order(orderParams, takerCriteria);
 
@@ -312,8 +318,14 @@ describe("Payload module", () => {
     };
 
     const takerCriteria = {
-      buy: "BTC",
-      sell: "ETH"
+      buy: {
+        asset: "bitcoin",
+        ledger: "bitcoin"
+      },
+      sell: {
+        asset: "ether",
+        ledger: "ethereum"
+      }
     };
     const order = new Order(orderParams, takerCriteria);
 

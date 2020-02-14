@@ -17,8 +17,15 @@ export interface OrderAsset {
 }
 
 export interface TakerCriteria {
-  buy: string;
-  sell: string;
+  buy: TakerCriteriaAsset;
+  sell: TakerCriteriaAsset;
+}
+
+export interface TakerCriteriaAsset {
+  ledger: string;
+  asset: string;
+  minNominalAmount?: string;
+  maxNominalAmount?: string;
 }
 
 export class Order {
@@ -39,15 +46,14 @@ export class Order {
   }
 }
 
-function assetMatches(criteriaAsset: string, orderAsset: OrderAsset) {
-  switch (criteriaAsset) {
-    case "ETH":
-      return orderAsset.asset === "ether";
-    case "BTC":
-      return orderAsset.asset === "bitcoin";
-    default:
-      return false;
-  }
+function assetMatches(
+  criteriaAsset: TakerCriteriaAsset,
+  orderAsset: OrderAsset
+) {
+  return (
+    criteriaAsset.asset === orderAsset.asset &&
+    criteriaAsset.ledger === orderAsset.ledger
+  );
 }
 
 export function orderSwapMatchesForMaker(
