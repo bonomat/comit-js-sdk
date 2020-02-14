@@ -347,4 +347,16 @@ describe("Order", () => {
 
     expect(order.matches()).toBeFalsy();
   });
+
+  it("doesnt take order if it is not valid", async () => {
+    const order = new Order(defaultOrderParams, defaultTakerCriteria, () => {
+      throw new Error("Test fail, order should not be taken");
+    });
+
+    order.isValid = () => {
+      return false;
+    };
+
+    await order.take();
+  });
 });
