@@ -42,7 +42,25 @@ export class Order {
   }
 
   public isValid(): boolean {
-    return true;
+    if (
+      !(
+        this.orderParams.ask.ledger &&
+        this.orderParams.ask.asset &&
+        this.orderParams.ask.nominalAmount &&
+        this.orderParams.bid.ledger &&
+        this.orderParams.bid.asset &&
+        this.orderParams.bid.nominalAmount &&
+        this.orderParams.validUntil &&
+        this.orderParams.id
+      )
+    ) {
+      return false;
+    }
+
+    const askAmount = new BigNumber(this.orderParams.ask.nominalAmount, 10);
+    const bidAmount = new BigNumber(this.orderParams.bid.nominalAmount, 10);
+
+    return !askAmount.isNaN() && !bidAmount.isNaN();
   }
 
   public async take(): Promise<Swap | undefined> {
