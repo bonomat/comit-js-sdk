@@ -28,7 +28,25 @@ export class Order {
   ) {}
 
   public matches(): boolean {
-    return true;
+    return this.assetsMatch();
+  }
+
+  private assetsMatch(): boolean {
+    return (
+      assetMatches(this.criteria.buy, this.orderParams.bid) &&
+      assetMatches(this.criteria.sell, this.orderParams.ask)
+    );
+  }
+}
+
+function assetMatches(criteriaAsset: string, orderAsset: OrderAsset) {
+  switch (criteriaAsset) {
+    case "ETH":
+      return orderAsset.asset === "ether";
+    case "BTC":
+      return orderAsset.asset === "bitcoin";
+    default:
+      return false;
   }
 }
 
