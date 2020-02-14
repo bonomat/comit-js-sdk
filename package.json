@@ -10,7 +10,7 @@
   "scripts": {
     "prepare": "tsc",
     "fix": "tslint -p . --fix && prettier --write '**/*.{ts,js,json,yml}'",
-    "test": "tsc --noEmit && tslint -p . && prettier --check '**/*.{ts,js,json,yml}' && jest",
+    "test": "tsc --noEmit && tslint -p . && prettier --check '**/*.{ts,js,json,yml}' && jest --collect-coverage",
     "docs:clean": "rm -rf docs/",
     "docs": "npm run docs:clean && typedoc --plugin none && open docs/index.html",
     "docs:md": "npm run docs:clean && typedoc --plugin typedoc-plugin-markdown --hideBreadcrumbs --theme docusaurus2"
