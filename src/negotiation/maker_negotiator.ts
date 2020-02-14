@@ -29,6 +29,7 @@ export class MakerNegotiator {
     );
   }
 
+  // TODO: We should validate the orders
   public addOrder(order: Order) {
     this.ordersByTradingPair[order.tradingPair] = order;
     this.ordersById[order.id] = order;
