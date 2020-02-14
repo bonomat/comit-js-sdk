@@ -331,4 +331,37 @@ describe("Payload module", () => {
 
     expect(order.matches()).toBeFalsy();
   });
+
+  it("doesnt match taker criteria if buy order amount is too low", () => {
+    const orderParams = {
+      tradingPair: "ETH-BTC",
+      id: "1234",
+      validUntil: 1234567890,
+      bid: {
+        ledger: "bitcoin",
+        asset: "bitcoin",
+        nominalAmount: "1.1"
+      },
+      ask: {
+        ledger: "ethereum",
+        asset: "ether",
+        nominalAmount: "99"
+      }
+    };
+
+    const takerCriteria = {
+      buy: {
+        asset: "bitcoin",
+        ledger: "bitcoin",
+        minNominalAmount: "2"
+      },
+      sell: {
+        asset: "ether",
+        ledger: "ethereum"
+      }
+    };
+    const order = new Order(orderParams, takerCriteria);
+
+    expect(order.matches()).toBeFalsy();
+  });
 });

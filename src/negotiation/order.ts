@@ -50,6 +50,20 @@ function assetMatches(
   criteriaAsset: TakerCriteriaAsset,
   orderAsset: OrderAsset
 ) {
+  if (criteriaAsset.minNominalAmount) {
+    const minAmount = new BigNumber(criteriaAsset.minNominalAmount);
+    if (!minAmount.isLessThanOrEqualTo(orderAsset.nominalAmount)) {
+      return false;
+    }
+  }
+
+  if (criteriaAsset.maxNominalAmount) {
+    const maxAmount = new BigNumber(criteriaAsset.maxNominalAmount);
+    if (!maxAmount.isGreaterThanOrEqualTo(orderAsset.nominalAmount)) {
+      return false;
+    }
+  }
+
   return (
     criteriaAsset.asset === orderAsset.asset &&
     criteriaAsset.ledger === orderAsset.ledger
