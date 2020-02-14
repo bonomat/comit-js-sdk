@@ -16,5 +16,7 @@ jobs:
           yarn install
           yarn list
           yarn test
+        with:
+          args: push rkusa/jest-action
         env:
           CI: true
