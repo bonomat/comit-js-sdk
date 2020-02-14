@@ -2,7 +2,7 @@ import { BigNumber } from "bignumber.js";
 import { Asset, Ledger, SwapProperties } from "../cnd";
 import { getToken, Token } from "../tokens/tokens";
 
-export interface Order {
+export interface OrderParams {
   tradingPair: string;
   id: string;
   validUntil: number;
@@ -16,8 +16,24 @@ export interface OrderAsset {
   nominalAmount: string;
 }
 
+export interface TakerCriteria {
+  buy: string;
+  sell: string;
+}
+
+export class Order {
+  constructor(
+    public readonly orderParams: OrderParams,
+    public readonly criteria: TakerCriteria
+  ) {}
+
+  public matches(): boolean {
+    return true;
+  }
+}
+
 export function orderSwapMatchesForMaker(
-  order: Order,
+  order: OrderParams,
   props: SwapProperties
 ): boolean {
   const params = props.parameters;

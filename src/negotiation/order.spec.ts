@@ -5,6 +5,7 @@ import {
   assetOrderToSwap,
   fromNominal,
   isNative,
+  Order,
   OrderAsset,
   orderSwapAssetMatchesForMaker,
   orderSwapMatchesForMaker
@@ -265,5 +266,31 @@ describe("Payload module", () => {
     const converted = fromNominal("PAY", "100", token);
     const expected = new BigNumber("100000000000000000000");
     expect(converted).toStrictEqual(expected);
+  });
+
+  it("matches taker criteria", () => {
+    const orderParams = {
+      tradingPair: "ETH-BTC",
+      id: "1234",
+      validUntil: 1234567890,
+      bid: {
+        ledger: "bitcoin",
+        asset: "bitcoin",
+        nominalAmount: "1.1"
+      },
+      ask: {
+        ledger: "ethereum",
+        asset: "ether",
+        nominalAmount: "99"
+      }
+    };
+
+    const takerCriteria = {
+      buy: "BTC",
+      sell: "ETH"
+    };
+    const order = new Order(orderParams, takerCriteria);
+
+    expect(order.matches()).toBeTruthy;
   });
 });
