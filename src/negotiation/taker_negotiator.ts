@@ -66,15 +66,11 @@ export class TakerNegotiator {
       tradingPair
     );
 
-    return new Order(orderParams, criteria);
+    return new Order(orderParams, criteria, this.takeOrder.bind(this));
   }
 
   public async takeOrder(order: OrderParams): Promise<Swap | undefined> {
     const executionParams = await this.makerClient.getExecutionParams(order);
-    if (!executionParams) {
-      return;
-    }
-
     if (!isValidExecutionParams(executionParams)) {
       return;
     }

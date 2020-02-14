@@ -1,5 +1,6 @@
 import { BigNumber } from "bignumber.js";
 import { Asset, Ledger, SwapProperties } from "../cnd";
+import { Swap } from "../swap";
 import { getToken, Token } from "../tokens/tokens";
 
 export interface OrderParams {
@@ -30,11 +31,24 @@ export interface TakerCriteriaAsset {
 export class Order {
   constructor(
     public readonly orderParams: OrderParams,
-    public readonly criteria: TakerCriteria
+    public readonly criteria: TakerCriteria,
+    public readonly takeOrder: (
+      orderParams: OrderParams
+    ) => Promise<Swap | undefined>
   ) {}
 
   public matches(): boolean {
     return this.assetsMatch();
+  }
+
+  public isValid(): boolean {
+    return true;
+  }
+
+  public async take(): Promise<Swap | undefined> {
+    if (this.matches() && this.isValid()) {
+      return this.takeOrder(this.orderParams);
+    }
   }
 
   private assetsMatch(): boolean {
