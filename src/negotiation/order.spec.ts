@@ -291,6 +291,32 @@ describe("Payload module", () => {
     };
     const order = new Order(orderParams, takerCriteria);
 
-    expect(order.matches()).toBeTruthy;
+    expect(order.matches()).toBeTruthy();
+  });
+
+  it("doesnt match taker criteria due to incorrect asset", () => {
+    const orderParams = {
+      tradingPair: "ETH-BTC",
+      id: "1234",
+      validUntil: 1234567890,
+      bid: {
+        ledger: "bitcoin",
+        asset: "bitcoin",
+        nominalAmount: "1.1"
+      },
+      ask: {
+        ledger: "ethereum",
+        asset: "PAY",
+        nominalAmount: "99"
+      }
+    };
+
+    const takerCriteria = {
+      buy: "BTC",
+      sell: "ETH"
+    };
+    const order = new Order(orderParams, takerCriteria);
+
+    expect(order.matches()).toBeFalsy();
   });
 });
