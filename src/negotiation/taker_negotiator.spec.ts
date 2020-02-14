@@ -1,8 +1,8 @@
 import { Cnd } from "../cnd";
-import { ComitClient } from "../comitClient";
+import { ComitClient } from "../comit_client";
 import { TakerNegotiator } from "./taker_negotiator";
 
-jest.mock("../comitClient");
+jest.mock("../comit_client");
 jest.mock("./maker_client");
 
 const defaultCnd = new Cnd("");
