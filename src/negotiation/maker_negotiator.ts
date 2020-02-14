@@ -3,7 +3,11 @@ import * as http from "http";
 import { ComitClient } from "../comit_client";
 import { sleep, timeoutPromise, TryParams } from "../timeout_promise";
 import { ExecutionParams } from "./execution_params";
-import { OrderParams, orderSwapMatchesForMaker } from "./order";
+import {
+  OrderParams,
+  orderParamsToTradingPair,
+  orderSwapMatchesForMaker
+} from "./order";
 
 export class MakerNegotiator {
   private ordersByTradingPair: { [tradingPair: string]: OrderParams } = {};
@@ -31,7 +35,7 @@ export class MakerNegotiator {
 
   // TODO: We should validate the orders
   public addOrder(order: OrderParams) {
-    this.ordersByTradingPair[order.tradingPair] = order;
+    this.ordersByTradingPair[orderParamsToTradingPair(order)] = order;
     this.ordersById[order.id] = order;
   }
 
@@ -151,15 +155,15 @@ class MakerHttpApi {
       }
     });
 
-    app.get("/orders/:tradingPair/:orderId/executionParams", async (_, res) => {
+    app.get("/orders/:orderId/executionParams", async (_, res) => {
       res.send(this.getExecutionParams());
     });
 
-    app.post("/orders/:tradingPair/:orderId/take", async (req, res) => {
+    app.post("/orders/:orderId/take", async (req, res) => {
       const order = this.getOrderById(req.params.orderId);
       const body = req.body;
 
-      if (!order || req.params.tradingPair !== order.tradingPair) {
+      if (!order) {
         res.status(404).send("OrderParams not found");
       } else if (!body || !body.swapId) {
         res.status(400).send("swapId missing from payload");
